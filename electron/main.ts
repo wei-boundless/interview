@@ -74,6 +74,9 @@ import {
 import { mainStrings } from './uiStrings';
 
 const MODEL_ID = 'onnx-community/whisper-large-v3-turbo-ONNX';
+const TEXT_ONLY_MIN_WIDTH = 240;
+const TEXT_ONLY_DEFAULT_WIDTH = 480;
+const STANDARD_DEFAULT_WIDTH = 940;
 
 /** tray 「检查更新」 (Phase 4). A real updater is Phase 5; until then the honest
  * answer is the releases page, opened through the same allowlist as every other
@@ -146,7 +149,7 @@ function bootstrap(): void {
       outputWidth = current.width;
       lastOutputAppliedWidth = current.width;
       outputExpanded = false;
-      win.setMinimumSize(300, 72);
+      win.setMinimumSize(TEXT_ONLY_MIN_WIDTH, 72);
     }
     // Hidden is a visibility state, never an invitation to reveal or resize the app.
     if (stealthHidden) return;
@@ -177,7 +180,7 @@ function bootstrap(): void {
       lastOutputAppliedWidth = applied.width;
     }
     if (!enabled) {
-      win.setMinimumSize(settings.data.ui.textOnly ? 300 : 420, 240);
+      win.setMinimumSize(settings.data.ui.textOnly ? TEXT_ONLY_MIN_WIDTH : 420, 240);
       outputOriginalSize = null;
       outputSize = null;
       lastOutputRequest = '';
@@ -307,9 +310,11 @@ function bootstrap(): void {
       const current = win.getBounds();
       if (lastTextOnlyMode) textOnlyWidth = current.width;
       else standardWidth = current.width;
-      const minimumWidth = textOnly ? 300 : 420;
+      const minimumWidth = textOnly ? TEXT_ONLY_MIN_WIDTH : 420;
       win.setMinimumSize(minimumWidth, textOnly && settings.data.ui.outputAutoSize ? 72 : 240);
-      const rememberedWidth = (textOnly ? textOnlyWidth : standardWidth) ?? current.width;
+      const rememberedWidth = textOnly
+        ? textOnlyWidth ?? TEXT_ONLY_DEFAULT_WIDTH
+        : standardWidth ?? STANDARD_DEFAULT_WIDTH;
       // Windows DPI rounding can report a few pixels above a requested minimum.
       // Reusing that reported width on every mode switch would slowly widen it.
       const preferredWidth = rememberedWidth <= minimumWidth + 6 ? minimumWidth : rememberedWidth;
@@ -553,9 +558,9 @@ function bootstrap(): void {
 
   function createWindow(): void {
     win = new BrowserWindow({
-      width: 940,
+      width: settings.data.ui.textOnly ? TEXT_ONLY_DEFAULT_WIDTH : STANDARD_DEFAULT_WIDTH,
       height: 560,
-      minWidth: settings.data.ui.textOnly ? 300 : 420,
+      minWidth: settings.data.ui.textOnly ? TEXT_ONLY_MIN_WIDTH : 420,
       minHeight: 240,
       frame: false,
       transparent: true,

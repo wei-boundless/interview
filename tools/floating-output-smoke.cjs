@@ -40,6 +40,7 @@ app.on('browser-window-created', (_event, win) => {
     try {
       await pause(900);
       const original = win.getBounds();
+      assert(Math.abs(original.width - 480) <= 2, 'text-only starts at a compact width');
       assert.equal(ignored, true, 'ordinary text-only mode also passes output clicks through');
       const openSettings = async () => { await js('window.__mcOpenSettings()'); await pause(); };
       const select = async (id, value) => {
@@ -58,8 +59,8 @@ app.on('browser-window-created', (_event, win) => {
       assert.equal(ignored, true);
       win.setSize(800, 560); await pause();
       const wide = await js(`document.querySelectorAll('.turn-body')[1].getBoundingClientRect().height`);
-      win.setSize(300, 560); await pause();
-      assert(Math.abs(win.getBounds().width - 300) <= 2, 'text-only window accepts 300px width');
+      win.setSize(240, 560); await pause();
+      assert(Math.abs(win.getBounds().width - 240) <= 2, 'text-only window accepts 240px width');
       const narrow = await js(`document.querySelectorAll('.turn-body')[1].getBoundingClientRect().height`);
       assert(narrow > wide, 'text must reflow rather than shrink its font');
       assert.equal(await js(`(()=>{const a=document.querySelectorAll('.turn');const box=document.querySelector('.session');return a[0].getBoundingClientRect().bottom<=a[1].getBoundingClientRect().top && box.scrollWidth<=box.clientWidth})()`), true);
@@ -122,7 +123,7 @@ app.on('browser-window-created', (_event, win) => {
       assert.equal(ignored, false, 'standard mode restores native interaction');
       assert(win.getBounds().width >= 420, 'standard mode retains its own minimum width');
       await openSettings(); await select('text-only', 'text'); await save();
-      assert(Math.abs(win.getBounds().width - 300) <= 3, 'text-only mode restores its narrow width');
+      assert(Math.abs(win.getBounds().width - 240) <= 3, 'text-only mode restores its narrow width');
       const edgeWork = screen.getDisplayMatching(win.getBounds()).workArea;
       win.setPosition(edgeWork.x + edgeWork.width - win.getBounds().width, win.getBounds().y);
       await openSettings(); await select('text-only', 'standard'); await save();
@@ -130,7 +131,7 @@ app.on('browser-window-created', (_event, win) => {
       const edge = win.getBounds();
       assert(edge.x >= edgeWork.x && edge.x + edge.width <= edgeWork.x + edgeWork.width + 3,
         'mode switching keeps a narrow window on screen at the right edge');
-      assert(Math.abs(edge.width - 300) <= 3, 'right-edge mode switch keeps the narrow width');
+      assert(Math.abs(edge.width - 240) <= 3, 'right-edge mode switch keeps the narrow width');
       assert.deepEqual(protection, [true], 'display operations must never disable content protection');
       assert.equal(await js('window.mc.getSettings().then(s=>s.ui.stealth)'), true);
       console.log('FLOATING_OUTPUT_SMOKE_OK', profile);

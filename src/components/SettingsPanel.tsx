@@ -609,7 +609,7 @@ export function SettingsPanel({
       </div>
       <div className="settings-row">
         <label htmlFor="text-opacity">{t.uiLang === 'zh' ? '淡化时文字不透明度' : 'Text opacity when faded'}</label>
-        <input id="text-opacity" type="range" min="0.1" max="1" step="0.05" value={textOpacity}
+        <input id="text-opacity" type="range" min="0.01" max="1" step="0.01" value={textOpacity}
           onChange={(e) => setTextOpacity(Number(e.target.value))} />
         <output htmlFor="text-opacity">{Math.round(textOpacity * 100)}%</output>
       </div>

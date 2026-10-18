@@ -982,7 +982,7 @@ export function App() {
   return (
     <I18nProvider lang={settings?.ui.lang}>
     <div className={['app', settings?.ui.textOnly && 'app-text-only', fadeActive && 'app-faded', revealing && 'app-revealing', settings?.ui.hideTranscript && 'hide-transcript', settings?.ui.hideInput && 'hide-input'].filter(Boolean).join(' ')}
-      style={{ '--overlay-opacity': Math.max(0.05, Math.min(1, settings?.ui.opacity ?? 0.94)), '--text-opacity': Math.max(0.1, Math.min(1, settings?.ui.textOpacity ?? 0.35)) } as CSSProperties}>
+      style={{ '--overlay-opacity': Math.max(0.05, Math.min(1, settings?.ui.opacity ?? 0.94)), '--text-opacity': Math.max(0.01, Math.min(1, settings?.ui.textOpacity ?? 0.35)) } as CSSProperties}>
       <header className="titlebar">
         <span className="text-only-handle">
           <button type="button" className="text-only-trigger" aria-expanded="false"

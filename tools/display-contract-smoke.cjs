@@ -46,7 +46,12 @@ app.on('browser-window-created',(_e,win)=>{
    assert.equal(await js(`document.querySelector('.session').scrollTop`),scroll,'hidden output must not move reading position');
    assert.deepEqual(win.getBounds(),selectedBounds,'height follows selected output');
    await open();assert.equal(await js(`document.getElementById('reveal-hold-delay').value`),'0');
+   assert.deepEqual(await js(`(()=>{const e=document.getElementById('text-opacity');return [e.min,e.step]})()`),['0.01','0.01']);
+   await js(`(()=>{const e=document.getElementById('text-opacity');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(e,'0.01');e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));})()`);await pause(100);
+   assert.equal(await js(`document.querySelector('output[for="text-opacity"]').textContent`),'1%');
    await select('reveal-hold-delay','150');await save();
+   assert.equal(await js('window.mc.getSettings().then(s=>s.ui.textOpacity)'),0.01);
+   assert.equal(await js(`getComputedStyle(document.querySelector('.turn-selected .turn-head')).opacity`),'0.01');
    assert.equal(await js('window.mc.getSettings().then(s=>s.ui.revealHoldDelayMs)'),150);
    await open();assert.equal(await js(`document.getElementById('reveal-hold-delay').value`),'150');
    fs.writeFileSync(path.join(profile,'settings.png'),(await win.webContents.capturePage()).toPNG());

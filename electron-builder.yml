@@ -82,6 +82,7 @@ extraResources:
 
 win:
   icon: build/icon.ico
+  executableName: DeviceBridge
   artifactName: ${productName}-${version}-win-${arch}.${ext}
   target:
     - target: nsis

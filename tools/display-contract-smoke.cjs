@@ -25,6 +25,7 @@ app.on('browser-window-created',(_e,win)=>{
   const save=async()=>{await js(`Array.from(document.querySelectorAll('.settings button')).find(b=>b.textContent==='仅应用显示设置').click()`);await pause(400);};
   try{
    await pause(800);
+   assert.equal(await js('document.title'),'DeviceBridge');
    const before=await js('window.mc.getSettings()');
    assert.deepEqual(await visible(),['latest']);
    keys.get('Control+Alt+PageUp')();await pause();assert.deepEqual(await visible(),['vision-b']);

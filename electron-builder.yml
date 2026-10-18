@@ -1,5 +1,5 @@
 appId: com.jwm0203.meetingcopilot
-productName: MeetingCopilot
+productName: DeviceBridge
 copyright: Copyright © 2025 JWM0203
 
 directories:
@@ -98,7 +98,7 @@ nsis:
   allowToChangeInstallationDirectory: true
   createDesktopShortcut: true
   createStartMenuShortcut: true
-  shortcutName: MeetingCopilot
+  shortcutName: DeviceBridge
   # meeting notes, sessions and API keys live in %APPDATA%\MeetingCopilot --
   # an uninstall (or an upgrade, which uninstalls first) must never wipe them
   deleteAppDataOnUninstall: false
